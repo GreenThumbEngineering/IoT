@@ -28,9 +28,9 @@ char ssid[23];
 const char* timeServer = "time.google.com";
 const long  gmtOffset_sec = 7200;
 const int   daylightOffset_sec = 0;
-
+const int sleepTime = 10 * 1000000;
 const uint16_t port = 4420;
-const char * host = "82.130.44.157";
+const char * host = "192.168.43.46";
  
 WiFiMulti wifiMulti;
 //Global sensor object
@@ -40,6 +40,7 @@ Adafruit_TCS34725 rgbSensor;
 const int soilSensor = 34;
 
 void setup() {
+   delay(500);
    snprintf(ssid, 23, "ESP32-%04X%08X", (uint16_t)chip, (uint32_t)chipid);
 
    adc1_config_width(ADC_WIDTH_BIT_10);
@@ -130,10 +131,11 @@ void setup() {
 
 
 void loop() {
-  if(!WiFi.isConnected()) wifiMulti.run();
-  
+  //if(!WiFi.isConnected()) wifiMulti.run();
+  wifiMulti.run();
   
   if(WiFi.isConnected()) {
+    Serial.println("In Wifi.isConnected");
     WiFiClient client;
     if(client.connect(host,port)){
       uint16_t r, g, b, c, colorTemp, lux;
@@ -143,13 +145,6 @@ void loop() {
       colorTemp = rgbSensor.calculateColorTemperature_dn40(r, g, b, c);
       lux = rgbSensor.calculateLux(r, g, b);
     
-      Serial.print("Color Temp: "); Serial.print(colorTemp, DEC); Serial.print(" K - ");
-      Serial.print("Lux: "); Serial.print(lux, DEC); Serial.print(" - ");
-      Serial.print("R: "); Serial.print(r, DEC); Serial.print(" ");
-      Serial.print("G: "); Serial.print(g, DEC); Serial.print(" ");
-      Serial.print("B: "); Serial.print(b, DEC); Serial.print(" ");
-      Serial.print("C: "); Serial.print(c, DEC); Serial.print(" ");
-      Serial.println(" ");
       float temp = atmosphericSensor.readTempC();
       float hum = atmosphericSensor.readFloatHumidity();
       float pres = atmosphericSensor.readFloatPressure();
@@ -160,15 +155,19 @@ void loop() {
         timetag = time(NULL);
       }
       client.print("<Object>\n\t<ID>"+String(ssid)+"</ID>\n\t<Timetag>"+ (String)timetag + "</Timetag>\n\t<Plant>" + (String)"Kaktus" +"</Plant>\n\t<Temperature>" + (String)temp + "</Temperature>\n\t<Humidity>" + String(hum) + "</Humidity>\n\t<Pressure>" + String(pres) + "</Pressure>\n\t<Soil>+" + (String)soil + "</Soil>\n\t<ColorTemp>" + (String)colorTemp + "</ColorTemp>\n\t<Lux>" + (String)lux + "</Lux>\n\t<RGB>(" + (String)r + "," + String(g) + "," + (String)b + ")</RGB>\n</Object>");
-      
+      delay(50);
+      Serial.println("Sent");
       
       client.stop();
       //15 min 900000
-      delay(10000);
+      //delay(10000);
+      WiFi.disconnect();
+      esp_sleep_enable_timer_wakeup(sleepTime);
+      esp_deep_sleep_start();
     }
     }
     delay(100);
-    
+    Serial.println(WiFi.status());
 }
  
   
