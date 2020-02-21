@@ -1,0 +1,14 @@
+[Unit]
+Description="Networking server for ESP32's, that sends data to the backend"
+After=multi-user.target
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/pi/Documents/greenthumbengineering/RaspServer.py
+Restart=on-failure
+RestartSec=3
+StandardOutput=file:/home/pi/Desktop/ESP32-server-log.txt
+
+[Install]
+WantedBy=default.target

@@ -1,1 +1,0 @@
-Currently the python server inserts data into local and cloud database. For the cloud database insertion to work, ODBC driver must be configured and pyodbc must be installed with pip. Folder contains example database SensorData, which contains examples of harvested data.
