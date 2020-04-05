@@ -14,4 +14,5 @@ Raspberrypi directory contains current services running on Raspberrypi and their
 ### BluetoothApp
 
 Plain app for configuring networking on Raspberrypi. 
+![Snapshot of the app](https://github.com/GreenThumbEngineering/IoT/tree/master/BluetoothApp/app.jpg)
 ----
