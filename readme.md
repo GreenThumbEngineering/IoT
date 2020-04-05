@@ -7,6 +7,11 @@ ESP32 directory contains codes for different boards and their setups, since diff
 
 ### Raspberrypi
 
-Raspberrypi directory contains current services running on raspberrypi and their systemd setupfiles. Their targets/wants are not listed yet, which have to be taken into account for the setup to work properly. Raspberrypi also contains the code snippet for taking pictures with raspberrypi camera module. Bluetooth-serialkey service extends pyBluez's examples. 
+Raspberrypi directory contains current services running on Raspberrypi and their systemd setupfiles. Their targets/wants are not listed yet, which have to be taken into account for the setup to work properly. Raspberrypi also contains the code snippet for taking pictures with raspberrypi camera module. Bluetooth-serialkey service extends pyBluez's examples. 
 
+----
+
+### BluetoothApp
+
+Plain app for configuring networking on Raspberrypi. 
 ----
